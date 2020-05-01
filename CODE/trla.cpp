@@ -94,9 +94,6 @@ void FillGaps(long* la,Lstring* s) {
 }//end FillGaps
 
 
-
-
-
 // function trla -------------------------------------------------------------
 void trla(Lstring* s,Tau* t,long *la) {
   long i, j, k;
@@ -132,7 +129,6 @@ void trla(Lstring* s,Tau* t,long *la) {
 
   FillGaps(la,s);
 }//end trla
-
 
 
 #ifdef _stand_alone

@@ -17,16 +17,16 @@
 #include "Lstring.hpp"
 #include "lynarr.hpp"
 
-/********************************************************************************
- ********************************************************************************
- ***************************  bsla code ******************************************
- ********************************************************************************
+/*******************************************************************************
+ *******************************************************************************
+ ***************************  bsla code ****************************************
+ *******************************************************************************
  *******************************************************************************/
 
 
 
 /* *******************************************************************
-   *               global data for bsla                               *
+   *               global data for bsla                              *
    *******************************************************************/
 long N;
 long nil=-1;
@@ -234,10 +234,10 @@ void check_conf(Lstring&,long);
 
 
 
-/* ************************************************************************************
-   *                      Function bsla                                                *
-   *                      input: string in integer alphabet                           *
-   ************************************************************************************/
+/* *****************************************************************************
+   *                      Function bsla                                        *
+   *                      input: string in integer alphabet                    *
+   *****************************************************************************/
 //function bsla ---------------------------------------------------------
 void bsla(Lstring& istring,long*& space) {
   long i, j, e, s, a, b, size;
@@ -266,9 +266,9 @@ void bsla(Lstring& istring,long*& space) {
   for(i=0; i<N; i++)
     Gstart[i]=Gnext[i]=Gprev[i]=Gmemb[i]=Cnext[i]=Cprev[i]=Gcntxt[i]=nil;
 
-  /* ************************************************************************
-   *                         setup initial prev                             *
-   **************************************************************************/
+  /* ***************************************************************************
+   *                         setup initial prev                                *
+   *****************************************************************************/
   prev_stack=auxA;
   // compute prev for initial config
   prev[0]=nil;
@@ -322,15 +322,15 @@ void bsla(Lstring& istring,long*& space) {
     }
   }//end case going down
   }//end for
-  /* ************************************************************************
-   *                    end of setup initial prev                           *
-   **************************************************************************/
+  /* ***************************************************************************
+   *                    end of setup initial prev                              *
+   *****************************************************************************/
 
 
 
-  /* ************************************************************************
-   *                    setup initial config                                *
-   **************************************************************************/
+  /* ***************************************************************************
+   *                    setup initial config                                   *
+   *****************************************************************************/
 
   // group by first letter
   last_group_number=0;
@@ -373,14 +373,14 @@ void bsla(Lstring& istring,long*& space) {
         Cprev[i]=nil;
     }
   }
-  /* ************************************************************************
-   *                    end of setup initial conf                           *
-   **************************************************************************/
+  /* ***************************************************************************
+   *                    end of setup initial conf                              *
+   *****************************************************************************/
 
 
-  /* ************************************************************************
-   *                    the refinement loop                                  *
-   **************************************************************************/
+  /* ***************************************************************************
+   *                    the refinement loop                                    *
+   *****************************************************************************/
   procgr=last_group_number;
 
   #ifdef _debug
@@ -396,7 +396,7 @@ void bsla(Lstring& istring,long*& space) {
     s=Gstart[procgr];
     e=Gprev[s];
 
-    // if procgr has size 1, all tghis can be skipped
+    // if procgr has size 1, all this can be skipped
     if (getGsize(procgr)==1) {
       j=Gstart[procgr];
       if (prev[j]==nil)  {  // no refinement taking place
@@ -435,7 +435,7 @@ void bsla(Lstring& istring,long*& space) {
         }
       }
     }
-    if (a==0) {// no refinement taking place
+    if (a==0) { // no refinement taking place
       #ifdef _debug
       printf("processing of group %d complete\n",procgr);
       show_conf(istring,procgr);
@@ -457,10 +457,10 @@ void bsla(Lstring& istring,long*& space) {
       if (i==e) break;
     }
     #endif
-    // end compute valences ************************************************
+    // end compute valences ****************************************************
 
     
-    // compute buckets starts for target groups in auxC  *******************
+    // compute buckets starts for target groups in auxC  ***********************
     // first blank auxA
     for(i=s;  ; i=Gnext[i]) {
       if (prev[i]==nil || Gval[i]==nil) {
@@ -509,7 +509,7 @@ void bsla(Lstring& istring,long*& space) {
       if (i==e) break;
     }
     #ifdef _debug
-    printf("target group frequences:\n");
+    printf("target group frequencies:\n");
     for(i=0; i<val; i++) {
       printf("translated target group %d has frequency %d\n",i,auxB[i]);
       if (i==s) break;
@@ -565,7 +565,7 @@ void bsla(Lstring& istring,long*& space) {
       auxA[Gval[i]]=0;
       if (i==e) break;
     }
-    // compute frequences of valencies, i.e. bucket sizes
+    // compute frequencies of valencies, i.e. bucket sizes
     for(i=s;  ; i=Gnext[i]) { 
       if (prev[i]==nil || Gval[i]==nil) {
         if (i==e) break;
@@ -575,7 +575,7 @@ void bsla(Lstring& istring,long*& space) {
       if (i==e) break;
     }
     #ifdef _debug
-    printf("val frequences:\n");
+    printf("val frequencies:\n");
     for(i=s;  ; i=Gnext[i]) { 
       if (prev[i]==nil || Gval[i]==nil) {
         if (i==e) break;
@@ -585,7 +585,7 @@ void bsla(Lstring& istring,long*& space) {
       if (i==e) break;
     }
     #endif
-    //compute valencies bucket starts, use val for cummulation
+    //compute valencies bucket starts, use val for cumulation
     val=0;
     for(i=size; i>=0; i--) {
       if (auxA[i]==nil || auxA[i]==0) continue;
@@ -624,10 +624,10 @@ void bsla(Lstring& istring,long*& space) {
       printf("%d val %d\n",auxB[i],Gval[auxB[i]]);
     printf("\n");
     #endif
-    // end order indices by valencies, store them in auxB **************************
+    // end order indices by valencies, store them in auxB **********************
 
-      // store in auxA indeces, grouped by target groups, descendingly ordered *************
-    // by val, descendingly orderd
+    // store in auxA indices, grouped by target groups, descending ordered *************
+    // by val, descending order
     // auxC contains target group bucket starts
     // auxB contains indices ordered by valencies
     // we will move them to target group buckets in auxA
@@ -761,15 +761,15 @@ void bsla(Lstring& istring,long*& space) {
     procgr=Cprev[procgr];
     if (procgr==nil) break;
     if (procgr==Cstart) break;
-  }//endwhile refinenement loop
-  /* ************************************************************************
-   *                    end of the refinement loop                          *
-   **************************************************************************/
+  }//endwhile refinement loop
+  /* ***************************************************************************
+   *                    end of the refinement loop                             *
+   *****************************************************************************/
 }//end bsla
-/********************************************************************************
- ********************************************************************************
- ********************* end of bsla code ******************************************
- ********************************************************************************
+/*******************************************************************************
+ *******************************************************************************
+ ********************* end of bsla code ****************************************
+ *******************************************************************************
  *******************************************************************************/
 
 // to compute LA ---------------------------------------------------------------
@@ -791,7 +791,7 @@ void bsla2la(Lstring& istring,long* la,long*& space) {
 // stuff for main() ----------------------------------------------------------
 
 #ifdef _debug
-// rotate x[from..to] 1 poisition to the right
+// rotate x[from..to] 1 position to the right
 void rotate(Lstring& x,long from,long to) {
   long a=x[from];
   for(long i=from+1; i<=to; i++)
@@ -936,7 +936,7 @@ void check_conf(Lstring& istring,long procgr) {
       size++;
       for(k=0; k<Gcntxt[j]; k++) {
         if (istring[i+k]!=istring[s+k]) {
-          printf("check_conf error: Group %d wrong context %d, discrepamncy between position %d and position %d\n",j,Gcntxt[j],s,i);
+          printf("check_conf error: Group %d wrong context %d, discrepancy between position %d and position %d\n",j,Gcntxt[j],s,i);
           getchar();
           exit(0);
         }
@@ -1147,7 +1147,7 @@ int main(int argc,char* argv[]) {
 
   // process the file
   while(fgets(line,linesize,fp)) {
-    for(i=strlen(line); i>=0; i--) {    // deend the line
+    for(i=strlen(line); i>=0; i--) {
       if (line[i]=='\0' || line[i]=='\n' || line[i]=='\r') {
         line[i]='\0';
         continue;

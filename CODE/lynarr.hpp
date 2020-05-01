@@ -30,7 +30,6 @@ bool isMaxLyn(Lstring& x,long from,long to) {
 	return false;
 }
 
-
 // compute Lyndon array --------------------------------
 long* idla(Lstring& x) {
    long i;
