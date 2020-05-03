@@ -6,7 +6,8 @@ the following algorithms: _IDLA_, _BSLA_, and _TRLA_. This code was used to take
 measurements and for empirical analysis. Details on these algorithms can be 
 found on 
 [my personal website](https://www.michaelliut.ca/publications--talks.html) as 
-they become available (and are published). 
+they become available (and are published). This document and code has been 
+updated since its initial release.
 
 -----
 ### IDLA
@@ -23,7 +24,7 @@ tree construction. The first idea of this algorithm was proposed by Paracha,
 but, has since been improved. _See trla.cpp and Tau.hpp_.
 
 -----
-## Supervisors and Research Laboratory
+## Former Ph.D. Supervisors and Research Laboratory
 
 **Professor** [Frantisek (Franya) Franek](https://www.cas.mcmaster.ca/~franek/), 
 Ph.D., RNDr., L.E.L.\
@@ -34,18 +35,18 @@ The Advanced Optimization Laboratory (AdvOL), McMaster University
 -----
 ## Copyright
 
-The work, herein, is Copyright 2016--2019.\
+The work, herein, is Copyright 2016--2020.\
 **No rights are given to reproduce or modify this work**.\
 If you are seeking rights to use some of the content within, please contact me 
-via email (send to: liutm [at] mcmaster.ca).
+via email (send to: michael [dot] liut [at] utoronto.ca).
 
 -----
 -----
 
-Michael Liut, M.Eng., B.A.Sc.\
-Department of Computing and Software\
-McMaster University\
-Hamilton, Ontario, Canada\
+Michael Liut, Ph.D., M.Eng., B.A.Sc.\
+Department of Mathematical and Computational Sciences\
+University of Toronto Mississauga\
+Mississauga, Ontario, Canada\
 [www.michaelliut.ca](https://www.michaelliut.ca/)
 
 -----
