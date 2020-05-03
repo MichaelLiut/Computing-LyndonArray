@@ -29,7 +29,7 @@ but, has since been improved. _See trla.cpp and Tau.hpp_.
 **Professor** [Frantisek (Franya) Franek](https://www.cas.mcmaster.ca/~franek/), 
 Ph.D., RNDr., L.E.L.\
 **Professor** [Antoine Deza](https://www.cas.mcmaster.ca/~deza/), Ph.D., P.Eng., 
-Field Institute Fellow\
+Fields Institute Fellow\
 The Advanced Optimization Laboratory (AdvOL), McMaster University
 
 -----
