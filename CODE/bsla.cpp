@@ -4,6 +4,8 @@
 #include <limits.h>
 #include <time.h>
 
+//#define _debug
+
 #define MAX (LONG_MAX-2)
 #define min(a,b) ((a<=b) ? (a) : (b))
 
@@ -17,17 +19,17 @@
 #include "Lstring.hpp"
 #include "lynarr.hpp"
 
-/*******************************************************************************
- *******************************************************************************
- ***************************  bsla code ****************************************
- *******************************************************************************
- *******************************************************************************/
+/******************************************************************************
+ ******************************************************************************
+ ********************************* bsla code **********************************
+ ******************************************************************************
+ ******************************************************************************/
 
 
 
-/* *******************************************************************
-   *               global data for bsla                              *
-   *******************************************************************/
+/******************************************************************************
+ *                          global data for bsla                              *
+ ******************************************************************************/
 long N;
 long nil=-1;
 long* prev;
@@ -51,9 +53,9 @@ long* prev_stack;  // it is only used to setup the initial prev[]
 long prevTop;
 
 
-/* ***************************************************************************
-   *                    auxiliary functions                                  *
-   ***************************************************************************/
+/******************************************************************************
+ *                          auxiliary functions                               *
+ ******************************************************************************/
 
 #define push_prev(a) prev_stack[++prevTop]=a
 #define pop_prev() prev_stack[prevTop--]
@@ -64,7 +66,7 @@ long prevTop;
 void show_prev_stack(Lstring& istring,FILE *fp=stdout) {
   fprintf(fp,"prev_stack:\n");
   if (prevTop<0) {
-    fprintf(fp,"<empy>\n");
+    fprintf(fp,"<empty>\n");
     return;
   }
   fprintf(fp,"%d",istring[prev_stack[0]]);
@@ -76,15 +78,32 @@ void show_prev_stack(Lstring& istring,FILE *fp=stdout) {
 
 #ifdef _debug
 // only used for testing -- show the contents of prev[]
-void show_prev(Lstring& prev,FILE* fp=stdout) {
+void show_prev(FILE* fp=stdout) {
   fprintf(fp,"prev:\n");
   for(long i=0; i<N; i++)
     if (prev[i]==nil)
-      fprintf(fp,"nil ");
+      fprintf(fp,"- ");
     else
       fprintf(fp,"%d ",prev[i]);
+  fputc('\n',fp);
 }//end show_prev
 #endif
+
+#ifdef _debug
+// only used for testing -- show the contents of auxA[]
+void show_auxB(FILE* fp=stdout) {
+  fprintf(fp,"auxB:\n");
+  for(long i=0; i<N; i++) 
+    if (auxB[i]==nil)
+      fprintf(fp,"- ");
+    else
+      fprintf(fp,"%d ",auxB[i]);
+  fputc('\n',fp);
+}//end show_auxB
+#endif
+
+
+
 
 #ifdef _debug
 // only used for testing -- show contents of Gmemb
@@ -234,10 +253,10 @@ void check_conf(Lstring&,long);
 
 
 
-/* *****************************************************************************
-   *                      Function bsla                                        *
-   *                      input: string in integer alphabet                    *
-   *****************************************************************************/
+/******************************************************************************
+ *                               Function bsla                                *
+ *                      input: string in integer alphabet                     *
+ ******************************************************************************/
 //function bsla ---------------------------------------------------------
 void bsla(Lstring& istring,long*& space) {
   long i, j, e, s, a, b, size;
@@ -263,80 +282,78 @@ void bsla(Lstring& istring,long*& space) {
   auxB=auxA+N;
   auxC=auxB+N;
   // and initialize it
-  for(i=0; i<N; i++)
-    Gstart[i]=Gnext[i]=Gprev[i]=Gmemb[i]=Cnext[i]=Cprev[i]=Gcntxt[i]=nil;
-
-  /* ***************************************************************************
-   *                         setup initial prev                                *
-   *****************************************************************************/
+  for(i=0; i<N; i++) {
+    Gstart[i]=Gnext[i]=Gprev[i]=Gmemb[i]=Cnext[i]=Cprev[i]=Gcntxt[i]=auxB[i]=nil;
+  }
+  /****************************************************************************
+   *                         setup initial prev                               *
+   ****************************************************************************/
   prev_stack=auxA;
   // compute prev for initial config
   prev[0]=nil;
   prevTop=nil;
   push_prev(0);
-  //show_prev_stack(istring);
+  auxB[istring[0]]=1;
   for(i=1; i<N; i++) {
-  //case going up
-  if (istring[i-1]<istring[i]) {
-    prev[i]=i-1;
-    push_prev(i);
-    //show_prev_stack(istring);
-    continue;
-  }//end going up
-
-  // case going straight
-  if (istring[i-1]==istring[i]) {
-    prev[i]=prev[i-1];
-    if (prev_stack[prevTop]==i-1) {
-    prev_stack[prevTop]=i;
-    //show_prev_stack(istring);
-    }
-    continue;
-  }//end going straight
-
-  // case going down
-  if (istring[i-1]>istring[i]) {
-    while(true) {
-    j=top_prev();
-    if (j==nil) {
+    auxB[istring[i]]=1;
+    //case going up
+    if (istring[i-1]<istring[i]) {
+      prev[i]=i-1;
       push_prev(i);
-      //show_prev_stack(istring);
-      prev[i]=nil;
-      break;
-    }
-    if (istring[j] > istring[i]) {
-      pop_prev();
-      //show_prev_stack(istring);
       continue;
-    }else if (istring[j] == istring[i]) {
-      prev_stack[prevTop]=i;
-      //show_prev_stack(istring);
-      prev[i]=prev[j];
-      break;
-    }else{ 
-      prev[i]=j;
-      push_prev(i);
-      //show_prev_stack(istring);
-      break;
-    }
-    }
-  }//end case going down
+    }//end going up
+  
+    // case going straight
+    if (istring[i-1]==istring[i]) {
+      prev[i]=prev[i-1];
+      if (prev_stack[prevTop]==i-1) {
+        prev_stack[prevTop]=i;
+      }
+      continue;
+    }//end going straight
+  
+    // case going down
+    if (istring[i-1]>istring[i]) {
+      while(true) {
+        j=top_prev();
+        if (j==nil) {
+          push_prev(i);
+          prev[i]=nil;
+          break;
+        }
+        if (istring[j] > istring[i]) {
+          pop_prev();
+          continue;
+        }else if (istring[j] == istring[i]) {
+          prev_stack[prevTop]=i;
+          prev[i]=prev[j];
+          break;
+        }else{ 
+          prev[i]=j;
+          push_prev(i);
+          break;
+        }
+      }
+    }//end case going down
   }//end for
-  /* ***************************************************************************
-   *                    end of setup initial prev                              *
-   *****************************************************************************/
+  /****************************************************************************
+   *                    end of setup initial prev                             *
+   ****************************************************************************/
 
 
 
-  /* ***************************************************************************
-   *                    setup initial config                                   *
-   *****************************************************************************/
-
-  // group by first letter
-  last_group_number=0;
+  /****************************************************************************
+   *                    setup initial config                                  *
+   ****************************************************************************/
+  // first traverse auxB and re-index it to get indices of the initial groups
+  j=0;
+  for(i=0; i<N; i++)
+    if (auxB[i]!=nil) auxB[i]=j++;
+  // group by the single letters
+  last_group_number = -1;
   for(i=0; i<N; i++) {
-    j=istring[i];
-    if (last_group_number < j) last_group_number=j;
+    j=auxB[istring[i]];
+    if (j > last_group_number) last_group_number = j;
     if (Gstart[j]==nil) {  // start group j
       Gstart[j]=i;
       Gnext[i]=nil;
@@ -373,33 +390,32 @@ void bsla(Lstring& istring,long*& space) {
         Cprev[i]=nil;
     }
   }
-  /* ***************************************************************************
-   *                    end of setup initial conf                              *
-   *****************************************************************************/
+  /****************************************************************************
+   *                        end of setup initial conf                         *
+   ****************************************************************************/
 
 
-  /* ***************************************************************************
-   *                    the refinement loop                                    *
-   *****************************************************************************/
-  procgr=last_group_number;
 
+  /****************************************************************************
+   *                           the refinement loop                            *
+   ****************************************************************************/
   #ifdef _debug
-  show_conf(istring,nil);
-  check_conf(istring,nil);
+  show_conf(istring,nil);  // show initial configuration
+  check_conf(istring,nil); // check initial configuration
   #endif
 
+  procgr=last_group_number; // group being processed, we start with the rightmost group
   long currenttargetgr;
   long currentchildgr;
   long currentval, i1, i2, chunksize, gr;
 
   while(true) {                                    // refinement loop
-    s=Gstart[procgr];
-    e=Gprev[s];
+    s=Gstart[procgr];  // group start
+    e=Gprev[s];        // group end
 
-    // if procgr has size 1, all this can be skipped
     if (getGsize(procgr)==1) {
       j=Gstart[procgr];
-      if (prev[j]==nil)  {  // no refinement taking place
+      if (prev[j]==nil)  {                         // no refinement taking place
         #ifdef _debug
         printf("processing of group %d complete\n",procgr);
         show_conf(istring,procgr);
@@ -417,7 +433,7 @@ void bsla(Lstring& istring,long*& space) {
       }
     }
 
-    // first compute valences and check if any refinement will take place *****************
+    // first compute valences and check if any refinement will take place ******
     val=1;
     a=0;
     for(i=e;   ; i=Gprev[i]) {
@@ -435,7 +451,7 @@ void bsla(Lstring& istring,long*& space) {
         }
       }
     }
-    if (a==0) { // no refinement taking place
+    if (a==0) {// no refinement taking place
       #ifdef _debug
       printf("processing of group %d complete\n",procgr);
       show_conf(istring,procgr);
@@ -515,7 +531,7 @@ void bsla(Lstring& istring,long*& space) {
       if (i==s) break;
     }
     #endif
-    // now translate the frequencies to bucket polongers
+    // now translate the frequencies to bucket pointers
     a=0;
     for(i=0; i<val; i++) {
       b=auxB[i];
@@ -554,7 +570,7 @@ void bsla(Lstring& istring,long*& space) {
     // end compute buckets starts for target groups in auxC  *******************
   
     // order indices by valencies, store them in auxB **************************
-    // blanc out auxA to use as counters for valencies
+    // 'blank out' auxA to use as counters for valencies
     size=getGsize(procgr);
     for(i=0; i<=size; i++) auxA[i]=nil;
     for(i=s;  ; i=Gnext[i]) { 
@@ -585,7 +601,7 @@ void bsla(Lstring& istring,long*& space) {
       if (i==e) break;
     }
     #endif
-    //compute valencies bucket starts, use val for cumulation
+    //compute valencies bucket starts, use val for accumulation
     val=0;
     for(i=size; i>=0; i--) {
       if (auxA[i]==nil || auxA[i]==0) continue;
@@ -626,7 +642,7 @@ void bsla(Lstring& istring,long*& space) {
     #endif
     // end order indices by valencies, store them in auxB **********************
 
-    // store in auxA indices, grouped by target groups, descending ordered *************
+    // store in auxA indices, grouped by target groups, descending ordered *****
     // by val, descending order
     // auxC contains target group bucket starts
     // auxB contains indices ordered by valencies
@@ -640,7 +656,9 @@ void bsla(Lstring& istring,long*& space) {
     #ifdef _debug
     printf("relevant indices grouped by targetgr, descending val, descending order:\n");
     for(i=0; i<a; i++) {
-      printf("%d targetgr=%d val=%d prev=%d prev[%d]=%d\n",auxA[i],Gmemb[prev[auxA[i]]],Gval[auxA[i]],prev[auxA[i]],prev[auxA[i]],prev[prev[auxA[i]]]);
+      printf("%d targetgr=%d val=%d prev=%d prev[%d]=%d\n",
+             auxA[i],Gmemb[prev[auxA[i]]],Gval[auxA[i]],prev[auxA[i]],
+             prev[auxA[i]],prev[prev[auxA[i]]]);
     }
     #endif
     // now we can use auxB and auxC, and process the indices as they are store in auxA
@@ -664,7 +682,7 @@ void bsla(Lstring& istring,long*& space) {
         #ifdef _debug
         printf("updating prev[%d]=%d in group %d\n",j,prev[j],gr);
         #endif
-        if (j==Gstart[gr]) {  // cannot improve it
+        if (j==Gstart[gr]) {                      // cannot improve it
           #ifdef _debug
           printf("prev[%d]=%d unchanged\n",j,prev[j]);
           #endif
@@ -752,7 +770,7 @@ void bsla(Lstring& istring,long*& space) {
       if (i1>=a) break;
       currenttargetgr=Gmemb[prev[auxA[i1]]];
       currentval=Gval[auxA[i1]];
-    }//endwhile process loop
+    }//end while process loop
     #ifdef _debug
     printf("processing of group %d complete\n",procgr);
     show_conf(istring,procgr);
@@ -761,16 +779,18 @@ void bsla(Lstring& istring,long*& space) {
     procgr=Cprev[procgr];
     if (procgr==nil) break;
     if (procgr==Cstart) break;
-  }//endwhile refinement loop
-  /* ***************************************************************************
-   *                    end of the refinement loop                             *
-   *****************************************************************************/
+  }//end while refinement loop
+  /****************************************************************************
+   *                        end of the refinement loop                        *
+   ****************************************************************************/
 }//end bsla
-/*******************************************************************************
- *******************************************************************************
- ********************* end of bsla code ****************************************
- *******************************************************************************
- *******************************************************************************/
+/******************************************************************************
+ ******************************************************************************
+ ****************************** end of bsla code ******************************
+ ******************************************************************************
+ ******************************************************************************/
+
+
 
 // to compute LA ---------------------------------------------------------------
 void bsla2la(Lstring& istring,long* la,long*& space) {
@@ -788,8 +808,8 @@ void bsla2la(Lstring& istring,long* la,long*& space) {
 }//end bsla2la
 
 
-// stuff for main() ----------------------------------------------------------
 
+// stuff for main() ------------------------------------------------------------
 #ifdef _debug
 // rotate x[from..to] 1 position to the right
 void rotate(Lstring& x,long from,long to) {
@@ -824,7 +844,7 @@ long lex(Lstring& x1,long from1,long to1,Lstring& x2,long from2,long to2) {
 #endif
 
 #ifdef _debug
-// returns true if x[from..to] is Lyndon, false otherwise
+// returns true if x[from..to] is Lyndon, otherwise false
 bool isLyndon(Lstring& x,long from,long to) {
   long i, j;
   Lstring y=Lstring(N);
@@ -876,7 +896,6 @@ long grcmp(long gr1,long gr2,Lstring& istring) {
 }//end grcmp
 #endif
 
-
 #ifdef _debug
 // returns true if x[from..to] is maximal Lyndon, false otherwise
 bool isMaxLyndon(Lstring& x,long from,long to,long N) {
@@ -890,7 +909,7 @@ bool isMaxLyndon(Lstring& x,long from,long to,long N) {
 #ifdef _debug
 // if procgr=nil --- initial configuration
 // otherwise after processing of procgr
-// function check_conf --------------------------------------------------------
+// function check_conf ---------------------------------------------------------
 void check_conf(Lstring& istring,long procgr) {
   long* x=new long[N];
   long* y=new long[N];
@@ -1069,38 +1088,7 @@ void check_conf(Lstring& istring,long procgr) {
 
 
 #ifdef _stand_alone
-// translate to integer alphabet
-char* toia(char* x) {
-  static char buf[500];
-  char alpha[500];
-  char *y=x;
-  long i, j;
-  for(i=0; i<500; i++)
-  buf[i]=alpha[i]=-1;
-  while(*y != '\0') {
-  buf[*y]++;
-  y++;
-  }
-  for(j=i=0; i<500; i++)
-  if (buf[i]>=0) alpha[j++]=(char) i;
-  y=x;
-  buf[0]='\0';
-  while(*y != '\0') {
-  // translate *y
-  strcat(buf,".");
-  for(i=0; alpha[i]>=0; i++) {
-    if (alpha[i]==*y) {
-    sprintf(buf+strlen(buf),"%u",i);
-    break;
-    }
-  }
-  y++;
-  }
-  return buf;
-}
-
-
-// function main -----------------------------------------------
+// function main ---------------------------------------------------------------
 int main(int argc,char* argv[]) {
   char infile[100];
   char* line;
@@ -1121,11 +1109,11 @@ int main(int argc,char* argv[]) {
   }else{
     printf("input file \"%s\" successfully opened\n",infile);
     printf("warning -- all the strings in the file \"%s\" are assumed"
-           "to be of the same length\n",infile);
+           " to be of the same length\n",infile);
   }
 
   // determine the length of the strings
-  // read the first line to determine the length of the string
+  // read the first line to determine the length of the strings
   N=0;
   while(true) {
     c=fgetc(fp);
@@ -1140,14 +1128,14 @@ int main(int argc,char* argv[]) {
     ds++;
     d=d/10;
   }
-  linesize = (ds+1)*N+1;
+  linesize = (ds+1)*N+2;
   line=new char[linesize];
 
   Lstring *s=new Lstring(N);
 
   // process the file
   while(fgets(line,linesize,fp)) {
-    for(i=strlen(line); i>=0; i--) {
+    for(i=strlen(line); i>=0; i--) {    // deend the line
       if (line[i]=='\0' || line[i]=='\n' || line[i]=='\r') {
         line[i]='\0';
         continue;
@@ -1155,15 +1143,16 @@ int main(int argc,char* argv[]) {
         break;
       }
     }//endfor
- 
     (*s)=line;
-    s->shownl();
+    //s->shownl();
     long* space=0;
     long* la = new long[s->getLen()];
     bsla2la(*s,la,space);
+/*
     for(long i=0; i<N;i++)
       printf("%d ",la[i]);
     putchar('\n');
+
 
     // compute Lyndon array directly
     long* LA;
@@ -1177,6 +1166,7 @@ int main(int argc,char* argv[]) {
       }
     }
     printf("PERFECT\n");
+*/
   }//end while
 
   fclose(fp);

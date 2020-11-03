@@ -15,7 +15,7 @@ private: // local utility methods
   }
   void parse_string(const char* s) {
     // if the string starts with . the string is in dot-notation, 
-    //e.g.     ".12.345.1.56.7"
+    // e.g.     ".12.345.1.56.7"
     // otherwise it is a normal notation "123451567"
 
     long i, slen, lastdot, j;
@@ -141,6 +141,7 @@ public:
   long& operator[] (long i) {  // indexing
     if (i >= len) {
       printf("index out of range\n");
+      printf("len=%d,index=%d\n",len,i);
       exit(1);
     }
     return body[i];

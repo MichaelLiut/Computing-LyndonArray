@@ -1,7 +1,7 @@
 #ifndef _lynarr_hpp
 #define _lynarr_hpp
 
-// returns the length of the longest Lyndon prefix of x   ---------------
+// returns the length of the longest Lyndon prefix of x   ----------------------
 long MaxLyn(Lstring& x,long beg=0) {
    long i;
    long p=1;
@@ -21,6 +21,8 @@ long MaxLyn(Lstring& x,long beg=0) {
    return max;
 }
 
+
+
 // check if the substring from..to is a max Lyndon in the string
 bool isMaxLyn(Lstring& x,long from,long to) {
   long j = MaxLyn(x,from);
@@ -30,7 +32,9 @@ bool isMaxLyn(Lstring& x,long from,long to) {
 	return false;
 }
 
-// compute Lyndon array --------------------------------
+
+
+// compute Lyndon array --------------------------------------------------------
 long* idla(Lstring& x) {
    long i;
    long *la = new long[x.getLen()];
@@ -39,7 +43,9 @@ long* idla(Lstring& x) {
    return la;
 }
 
-// compute Lyndon array --------------------------------
+
+
+// compute Lyndon array --------------------------------------------------------
 void idla1(Lstring& x,long* la) {
    long i;
    //printf("******************************************\n");

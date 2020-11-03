@@ -41,7 +41,7 @@ void showla(long *la,long len) {
 }
 
 
-// function FillGaps ---------------------------------------------------------
+// function FillGaps -----------------------------------------------------------
 void FillGaps(long* la,Lstring* s) {
   long i, A, B, Aend, Bend, frame_end;
 
@@ -94,7 +94,8 @@ void FillGaps(long* la,Lstring* s) {
 }//end FillGaps
 
 
-// function trla -------------------------------------------------------------
+
+// function trla ---------------------------------------------------------------
 void trla(Lstring* s,Tau* t,long *la) {
   long i, j, k;
   t->reset(s);
@@ -131,8 +132,9 @@ void trla(Lstring* s,Tau* t,long *la) {
 }//end trla
 
 
+
 #ifdef _stand_alone
-// function main -------------------------------------------------------------
+// function main ---------------------------------------------------------------
 int main() {
   long size=50;
   char infile[]="eng50.asc";

@@ -4,11 +4,11 @@
 #include <time.h>
 #include <limits.h>
 
-/* ****************************************************************************** */
+/******************************************************************************/
 // define precision for time measurements, 3 decimal places, i.e. in milliseconds
 #define prec 3
 // define which program is being tested by defining in the compilation
-/* ****************************************************************************** */
+/******************************************************************************/
 
 #define MAX (LONG_MAX-2)
 #define min(a,b) ((a<=b) ? (a) : (b))
@@ -31,7 +31,7 @@ clock_t t;
 
 
 // display ticks as seconds with prec decimal places
-// function show_time -------------------------------------------
+// function show_time ----------------------------------------------------------
 char* show_time(clock_t t) {
   static char buf[100];
   long i, j;
@@ -44,9 +44,8 @@ char* show_time(clock_t t) {
 
 
 
-
 #ifdef _IDLA
-// function measurement ------------------------------------------
+// function measurement --------------------------------------------------------
 long measurement(Lstring *x,long *la,long string_counter,char* infile,
                  FILE* fpo,long repeat) {
    // turn on the clock here
@@ -57,21 +56,20 @@ long measurement(Lstring *x,long *la,long string_counter,char* infile,
    // turn off the clock here
    t = clock()-t;
    // record the time
+   fprintf(fpo,"%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
+           repeat,string_counter,infile,t);
    #ifndef _silent
-     printf("%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
-            repeat,string_counter,infile,t);
+   printf("%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
+           repeat,string_counter,infile,t);
    #endif
-     fprintf(fpo,"%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
-            repeat,string_counter,infile,t);
    return t;
 }//end measurement
 #endif
 
 
 
-
 #ifdef _BSLA
-// function measurement ------------------------------------------
+// function measurement --------------------------------------------------------
 long measurement(Lstring *x,long *la,long string_counter,char* infile,
                  FILE* fpo,long repeat) {
    static long* space=0;
@@ -84,40 +82,45 @@ long measurement(Lstring *x,long *la,long string_counter,char* infile,
    // turn off the clock here
    t = clock()-t;
    // record the time
+   fprintf(fpo,"%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
+           repeat,string_counter,infile,t);
    #ifndef _silent
-     printf("%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
-            repeat,string_counter,infile,t);
+   printf("%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
+           repeat,string_counter,infile,t);
    #endif
-     fprintf(fpo,"%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
-            repeat,string_counter,infile,t);
 
-   // test correctness
-   /*
+// test correctness
+#ifdef _test_correctness
    static long *la1=0;
    if (la1==0) la1=new long[x->getLen()];
    idla1(*x,la1);
    for(i=0; i < x->getLen(); i++) {
      if (la[i]!=la1[i]) {
-       #ifndef _silent
-       printf("ERROR\n");
-       getchar();
+       #ifdef _silent
+         FILE* err;
+         err=fopen("silent_testbed.error","w");
+         fprintf(err,"ERROR\n");
+         fclose(err);
+         exit(1);
+       #else
+         printf("ERROR\n");
+         getchar();
+	 exit(1);
        #endif
-       FILE* err;
-       err=fopen("testbed.error","w");
-       fprintf(err,"ERROR\n");
-       fclose(err);
-       exit(1);
      }
-   }*/
+   }
+   #ifndef _silent
+   printf("PERFECT\n");
+   #endif
+#endif
    return t;
 }//end measurement
 #endif
 
 
 
-
 #ifdef _TRLA
-// function measurement ------------------------------------------
+// function measurement --------------------------------------------------------
 long measurement(Lstring *x,long *la,long string_counter,char* infile,
                  FILE* fpo,long repeat) {
    static Tau* tau=0;
@@ -132,15 +135,15 @@ long measurement(Lstring *x,long *la,long string_counter,char* infile,
    // turn off the clock here
    t = clock()-t;
    // record the time
+   fprintf(fpo,"%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
+           repeat,string_counter,infile,t);
    #ifndef _silent
-     printf("%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
-            repeat,string_counter,infile,t);
+   printf("%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
+           repeat,string_counter,infile,t);
    #endif
-     fprintf(fpo,"%u repeats, string no. %u, dataset \'%s\', %u ticks\n",
-            repeat,string_counter,infile,t);
 
-   // test correctness
-   /*
+// test correctness
+#ifdef _test_correctness
    static long *la1=0;
    if (la1==0) la1=new long[x->getLen()];
    idla1(*x,la1);
@@ -151,15 +154,20 @@ long measurement(Lstring *x,long *la,long string_counter,char* infile,
        getchar();
        #endif
        FILE* err;
-       err=fopen("testbed.error","w");
+       err=fopen("silent_testbed.error","w");
        fprintf(err,"ERROR\n");
        fclose(err);
        exit(1);
      }
-   }*/
+   }
+   #ifndef _silent
+   printf("PERFECT\n");
+   #endif
+#endif
    return t;
 }//end measurement
 #endif
+
 
 
 void format(FILE *fp,long ticks,long repeat) {
@@ -186,8 +194,7 @@ void format(FILE *fp,long ticks,long repeat) {
 
 
 
-
-// function main ---------------------------------------
+// function main ---------------------------------------------------------------
 int main(int argc, char* argv[]) {
   if (argc != 2) {
     #ifndef _silent
@@ -206,7 +213,7 @@ int main(int argc, char* argv[]) {
       return 0;
     #else
       FILE* err;
-      err=fopen("testbed.error","w");
+      err=fopen("silent_testbed.error","w");
       fprintf(err,"testing algorithm ");
         #ifdef _IDLA
           fprintf(err,"IDLA");
@@ -244,7 +251,7 @@ int main(int argc, char* argv[]) {
       printf("can't open input file \"%s\"\n",infile);
     #else
     FILE* err;
-    err=fopen("error","w");
+    err=fopen("silent_testbed.error","w");
       fprintf(err,"can't open input file \"%s\"\n",infile);
     fclose(err);
     #endif
@@ -257,7 +264,7 @@ int main(int argc, char* argv[]) {
       printf("can't open output file \"%s\"\n",outfile);
     #else
       FILE* err;
-      err=fopen("error","w");
+      err=fopen("silent_testbed.error","w");
       fprintf(err,"can't open output file \"%s\"\n",outfile);
       fclose(err);
     #endif
@@ -316,7 +323,7 @@ int main(int argc, char* argv[]) {
     ds++;
     d = d/10;
   }
-  long linesize=(ds+1)*len+1;
+  long linesize=(ds+1)*len+2;
   char *line = new char[linesize];
 
   #ifndef _silent
@@ -329,7 +336,7 @@ int main(int argc, char* argv[]) {
 
   // process the file
   while(fgets(line,linesize,fpi)) {
-    for(i=strlen(line); i>=0; i--) {
+    for(i=strlen(line); i>=0; i--) {    // deend the line
       if (line[i]=='\0' || line[i]=='\n' || line[i]=='\r') {
         line[i]='\0';
         continue;
