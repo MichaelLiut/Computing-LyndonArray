@@ -1,0 +1,12 @@
+genfile 10 4 100 dna_10.dat
+genfile 50 4 100 dna_50.dat
+genfile 100 4 100 dna_100.dat
+genfile 500 4 100 dna_500.dat
+genfile 1000 4 100 dna_1000.dat
+genfile 5000 4 100 dna_5000.dat
+genfile 10000 4 100 dna_10000.dat
+genfile 50000 4 100 dna_50000.dat
+genfile 100000 4 100 dna_100000.dat
+genfile 500000 4 100 dna_500000.dat
+genfile 1000000 4 100 dna_1000000.dat
+genfile 5000000 4 100 dna_5000000.dat

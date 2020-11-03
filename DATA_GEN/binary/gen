@@ -1,0 +1,12 @@
+genfile 10 2 100 bin_10.dat
+genfile 50 2 100 bin_50.dat
+genfile 100 2 100 bin_100.dat
+genfile 500 2 100 bin_500.dat
+genfile 1000 2 100 bin_1000.dat
+genfile 5000 2 100 bin_5000.dat
+genfile 10000 2 100 bin_10000.dat
+genfile 50000 2 100 bin_50000.dat
+genfile 100000 2 100 bin_100000.dat
+genfile 500000 2 100 bin_500000.dat
+genfile 1000000 2 100 bin_1000000.dat
+genfile 5000000 2 100 bin_5000000.dat

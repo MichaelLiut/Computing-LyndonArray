@@ -1,0 +1,12 @@
+genfile 10 26 100 eng_10.dat
+genfile 50 26 100 eng_50.dat
+genfile 100 26 100 eng_100.dat
+genfile 500 26 100 eng_500.dat
+genfile 1000 26 100 eng_1000.dat
+genfile 5000 26 100 eng_5000.dat
+genfile 10000 26 100 eng_10000.dat
+genfile 50000 26 100 eng_50000.dat
+genfile 100000 26 100 eng_100000.dat
+genfile 500000 26 100 eng_500000.dat
+genfile 1000000 26 100 eng_1000000.dat
+genfile 5000000 26 100 eng_5000000.dat

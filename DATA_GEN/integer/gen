@@ -1,0 +1,12 @@
+genfile 10 10 100 int_10.dat
+genfile 50 50 100 int_50.dat
+genfile 100 100 100 int_100.dat
+genfile 500 500 100 int_500.dat
+genfile 1000 1000 100 int_1000.dat
+genfile 5000 5000 100 int_5000.dat
+genfile 10000 10000 100 int_10000.dat
+genfile 50000 50000 100 int_50000.dat
+genfile 100000 100000 100 int_100000.dat
+genfile 500000 500000 100 int_500000.dat
+genfile 1000000 1000000 100 int_1000000.dat
+genfile 5000000 5000000 100 int_5000000.dat
