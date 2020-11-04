@@ -5,7 +5,7 @@ and _integer_ strings. Further, I have included the generation files of
 _EXTREME_ strings, which generate data for _IDLA_ and _TRLA_ strings. 
 
 If you would like access to the original data generated please contact me and 
-it can be made available on request.
+it can be made available upon request.
 
 -----
 ## Copyright
